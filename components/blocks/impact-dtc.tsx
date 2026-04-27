@@ -111,6 +111,7 @@ export function ImpactDtc() {
                 src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=800&auto=format&fit=crop"
                 alt="Research data analysis"
                 fill
+                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                 className="object-cover"
               />
             </div>
@@ -119,6 +120,7 @@ export function ImpactDtc() {
                 src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop"
                 alt="Collaborative meeting"
                 fill
+                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                 className="object-cover"
               />
             </div>

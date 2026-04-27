@@ -83,6 +83,7 @@ export function AboutDtc() {
             src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2000&auto=format&fit=crop"
             alt="Research team collaboration"
             fill
+            sizes="(min-width: 1024px) calc(100vw - 12rem), (min-width: 640px) calc(100vw - 6rem), calc(100vw - 3rem)"
             className="object-cover"
           />
         </div>

@@ -222,13 +222,15 @@ function ProjectItem({ project, index, onHover, onClick }: { project: Project; i
 
   const xTo = useRef<gsap.QuickToFunc | null>(null);
   const yTo = useRef<gsap.QuickToFunc | null>(null);
-  const scaleTo = useRef<gsap.QuickToFunc | null>(null);
+  const scaleXTo = useRef<gsap.QuickToFunc | null>(null);
+  const scaleYTo = useRef<gsap.QuickToFunc | null>(null);
 
   useEffect(() => {
     if (!canvasWrapperRef.current) return;
     xTo.current = gsap.quickTo(canvasWrapperRef.current, "x", { duration: 0.8, ease: "power3.out" });
     yTo.current = gsap.quickTo(canvasWrapperRef.current, "y", { duration: 0.8, ease: "power3.out" });
-    scaleTo.current = gsap.quickTo(canvasWrapperRef.current, "scale", { duration: 0.6, ease: "power2.out" });
+    scaleXTo.current = gsap.quickTo(canvasWrapperRef.current, "scaleX", { duration: 0.6, ease: "power2.out" });
+    scaleYTo.current = gsap.quickTo(canvasWrapperRef.current, "scaleY", { duration: 0.6, ease: "power2.out" });
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -240,8 +242,13 @@ function ProjectItem({ project, index, onHover, onClick }: { project: Project; i
     yTo.current(-y * 30);
   };
 
-  const handleMouseEnter = () => { onHover(true); scaleTo.current?.(1.22); };
-  const handleMouseLeave = () => { onHover(false); xTo.current?.(0); yTo.current?.(0); scaleTo.current?.(1.15); };
+  const setImageScale = (value: number) => {
+    scaleXTo.current?.(value);
+    scaleYTo.current?.(value);
+  };
+
+  const handleMouseEnter = () => { onHover(true); setImageScale(1.22); };
+  const handleMouseLeave = () => { onHover(false); xTo.current?.(0); yTo.current?.(0); setImageScale(1.15); };
 
   useEffect(() => {
     if (!containerRef.current) return;

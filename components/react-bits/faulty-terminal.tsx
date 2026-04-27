@@ -276,7 +276,7 @@ export default function FaultyTerminal({
   const frozenTimeRef = useRef(0);
   const rafRef = useRef<number>(0);
   const loadAnimationStartRef = useRef<number>(0);
-  const timeOffsetRef = useRef<number>(Math.random() * 100);
+  const timeOffsetRef = useRef<number>(0);
 
   const tintVec = useMemo(() => hexToRgb(tint), [tint]);
 
@@ -297,6 +297,8 @@ export default function FaultyTerminal({
   useEffect(() => {
     const ctn = containerRef.current;
     if (!ctn) return;
+    const container = ctn;
+    timeOffsetRef.current = Math.random() * 100;
 
     const renderer = new Renderer({
       dpr: dpr ?? Math.min(window.devicePixelRatio || 1, 2),
@@ -349,7 +351,7 @@ export default function FaultyTerminal({
     const mesh = new Mesh(gl, { geometry, program });
 
     function resize() {
-      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+      renderer.setSize(container.offsetWidth, container.offsetHeight);
       program.uniforms.iResolution.value = new Color(
         gl.canvas.width,
         gl.canvas.height,
@@ -358,7 +360,7 @@ export default function FaultyTerminal({
     }
 
     const resizeObserver = new ResizeObserver(() => resize());
-    resizeObserver.observe(ctn);
+    resizeObserver.observe(container);
     resize();
 
     const update = (t: number) => {
@@ -398,15 +400,15 @@ export default function FaultyTerminal({
       renderer.render({ scene: mesh });
     };
     rafRef.current = requestAnimationFrame(update);
-    ctn.appendChild(gl.canvas);
+    container.appendChild(gl.canvas);
 
-    if (mouseReact) ctn.addEventListener("mousemove", handleMouseMove);
+    if (mouseReact) container.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       resizeObserver.disconnect();
-      if (mouseReact) ctn.removeEventListener("mousemove", handleMouseMove);
-      if (gl.canvas.parentElement === ctn) ctn.removeChild(gl.canvas);
+      if (mouseReact) container.removeEventListener("mousemove", handleMouseMove);
+      if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
       loadAnimationStartRef.current = 0;
       timeOffsetRef.current = Math.random() * 100;
