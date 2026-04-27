@@ -215,9 +215,9 @@ const SilkWaves: React.FC<SilkWavesProps> = ({
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    const clock = new THREE.Clock();
+    const clock = new THREE.Timer();
     const animate = () => {
-      const elapsedTime = clock.getElapsedTime();
+      const elapsedTime = clock.getElapsed();
       material.uniforms.uTime.value = elapsedTime;
 
       renderer.render(scene, camera);
