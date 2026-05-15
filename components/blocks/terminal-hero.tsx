@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 const FaultyTerminal = dynamic(
   () => import("@/components/react-bits/faulty-terminal"),
@@ -9,28 +10,34 @@ const FaultyTerminal = dynamic(
 );
 
 export function TerminalHero() {
+  const reduced = useReducedMotion();
+
   return (
     <section className="relative w-full h-screen overflow-hidden bg-black">
       {/* Terminal background */}
-      <div className="absolute inset-0">
-        <FaultyTerminal
-          scale={1.5}
-          gridMul={[2, 1]}
-          digitSize={1.2}
-          timeScale={0.8}
-          scanlineIntensity={1}
-          glitchAmount={1}
-          flickerAmount={1}
-          noiseAmp={1}
-          chromaticAberration={0}
-          dither={0}
-          curvature={0}
-          tint="#4ade80"
-          mouseReact={true}
-          mouseStrength={0.5}
-          pageLoadAnimation={true}
-          brightness={0.4}
-        />
+      <div className="absolute inset-0" aria-hidden="true">
+        {reduced ? (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(74,222,128,0.18),transparent_60%)]" />
+        ) : (
+          <FaultyTerminal
+            scale={1.5}
+            gridMul={[2, 1]}
+            digitSize={1.2}
+            timeScale={0.8}
+            scanlineIntensity={1}
+            glitchAmount={1}
+            flickerAmount={1}
+            noiseAmp={1}
+            chromaticAberration={0}
+            dither={0}
+            curvature={0}
+            tint="#4ade80"
+            mouseReact={true}
+            mouseStrength={0.5}
+            pageLoadAnimation={true}
+            brightness={0.4}
+          />
+        )}
       </div>
 
       {/* Gradient vignette so text pops */}

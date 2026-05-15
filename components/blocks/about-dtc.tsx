@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -15,9 +16,11 @@ export function AboutDtc() {
   const imageRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!sectionRef.current) return;
+    if (reduced) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -73,7 +76,7 @@ export function AboutDtc() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reduced]);
 
   return (
     <section ref={sectionRef} id="mission" className="bg-background pb-24 lg:pb-32">

@@ -4,13 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 export function Hero3() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!canvasRef.current) return;
+    if (reduced) return;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -228,7 +231,7 @@ export function Hero3() {
       material.dispose();
       renderer.dispose();
     };
-  }, [mousePosition]);
+  }, [mousePosition, reduced]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -242,11 +245,22 @@ export function Hero3() {
       className="relative w-full min-h-screen overflow-hidden bg-black dark:bg-neutral-950"
       onMouseMove={handleMouseMove}
     >
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full z-0"
-        style={{ position: "absolute", top: 0, left: 0 }}
-      />
+      {reduced ? (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full z-0"
+          style={{
+            background:
+              "linear-gradient(135deg, #1a1a3a 0%, #2d2a5a 40%, #4f3f78 75%, #6b5599 100%)",
+          }}
+        />
+      ) : (
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full z-0"
+          style={{ position: "absolute", top: 0, left: 0 }}
+        />
+      )}
 
       <div className="bg-[rgba(0,0,0,0.3)] dark:bg-[rgba(0,0,0,0.5)] z-10 relative flex flex-col p-[4vmax] h-dvh overflow-hidden">
         <div className="flex-1 relative w-full overflow-hidden">

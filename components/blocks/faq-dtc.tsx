@@ -3,6 +3,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -34,9 +35,11 @@ const faqs = [
 function FaqItem({ question, answer, index }: { question: string; answer: string; index: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!itemRef.current) return;
+    if (reduced) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -58,7 +61,7 @@ function FaqItem({ question, answer, index }: { question: string; answer: string
     }, itemRef);
 
     return () => ctx.revert();
-  }, [index]);
+  }, [index, reduced]);
 
   return (
     <div
@@ -93,9 +96,11 @@ function FaqItem({ question, answer, index }: { question: string; answer: string
 export function FaqDtc() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!sectionRef.current) return;
+    if (reduced) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -117,7 +122,7 @@ export function FaqDtc() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reduced]);
 
   return (
     <section ref={sectionRef} className="bg-background py-24 lg:py-32">

@@ -3,10 +3,14 @@
 import { HeaderDtc } from "@/components/blocks/header-dtc";
 import { TerminalHero } from "@/components/blocks/terminal-hero";
 import { Hero3 } from "@/components/blocks/hero-3";
+import { ProblemDtc } from "@/components/blocks/problem-dtc";
+import { BuiltDtc } from "@/components/blocks/built-dtc";
 import { ResearchDtc } from "@/components/blocks/research-dtc";
 import { ServicesDtc } from "@/components/blocks/services-dtc";
 import { AboutDtc } from "@/components/blocks/about-dtc";
+import { GovernanceDtc } from "@/components/blocks/governance-dtc";
 import { ImpactDtc } from "@/components/blocks/impact-dtc";
+import { JoinDtc } from "@/components/blocks/join-dtc";
 import { FaqDtc } from "@/components/blocks/faq-dtc";
 import { FooterDtc } from "@/components/blocks/footer-dtc";
 
@@ -17,10 +21,14 @@ export default function LandingPage() {
       <main id="main-content" className="lg:relative lg:z-10 flex-1 bg-background">
         <TerminalHero />
         <Hero3 />
+        <ProblemDtc />
+        <BuiltDtc />
         <ResearchDtc />
         <ServicesDtc />
         <AboutDtc />
+        <GovernanceDtc />
         <ImpactDtc />
+        <JoinDtc />
         <FaqDtc />
       </main>
       <FooterDtc />

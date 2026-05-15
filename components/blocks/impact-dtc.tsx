@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -40,9 +41,11 @@ export function ImpactDtc() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!sectionRef.current) return;
+    if (reduced) return;
 
     const ctx = gsap.context(() => {
       // Header animation
@@ -87,7 +90,7 @@ export function ImpactDtc() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reduced]);
 
   return (
     <section ref={sectionRef} id="impact" className="bg-background py-24 lg:py-32">
@@ -130,18 +133,19 @@ export function ImpactDtc() {
             <div>
               <QuoteIcon className="w-10 h-10 text-foreground/20 mb-6" />
               <blockquote className="text-2xl lg:text-3xl font-medium leading-snug text-foreground">
-                DTC&apos;s research helped us understand the global landscape for teen digital rights, directly informing our policy advocacy.
+                The first systematic global database of teen social-media restrictions — used by DTC to confront governments at IGF 2025 and now under peer review at Taylor &amp; Francis.
               </blockquote>
               <div className="mt-6">
-                <p className="font-semibold text-foreground">Partner Organization</p>
-                <p className="text-sm text-foreground/60">Digital Rights Advocate</p>
+                <p className="font-semibold text-foreground">UN Internet Governance Forum</p>
+                <p className="text-sm text-foreground/60">Oslo · 2025</p>
               </div>
             </div>
             <div className="flex items-center justify-between mt-auto pt-8">
-              <span className="text-xl font-semibold text-foreground">Impact Report</span>
+              <span className="text-xl font-semibold text-foreground">See our work</span>
               <Link
-                href="#"
+                href="#built"
                 className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+                aria-label="See our work"
               >
                 <ArrowIcon className="w-4 h-4" />
               </Link>
@@ -150,14 +154,15 @@ export function ImpactDtc() {
 
           <div className="bg-muted/50 rounded-2xl p-6 flex flex-col">
             <div className="flex-1">
-              <p className="text-3xl font-semibold text-foreground">40+</p>
-              <p className="text-sm text-foreground/60 mt-1">Countries monitored</p>
+              <p className="text-3xl font-semibold text-foreground">42</p>
+              <p className="text-sm text-foreground/60 mt-1">Countries with restrictions tracked in our global database</p>
             </div>
             <div className="flex items-center justify-between mt-auto pt-4">
-              <span className="text-sm font-medium text-foreground">Global Reach</span>
+              <span className="text-sm font-medium text-foreground">Global Coverage</span>
               <Link
-                href="#"
+                href="#built"
                 className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+                aria-label="View restriction database"
               >
                 <ArrowIcon className="w-4 h-4" />
               </Link>
@@ -166,14 +171,15 @@ export function ImpactDtc() {
 
           <div className="bg-muted/50 rounded-2xl p-6 flex flex-col">
             <div className="flex-1">
-              <p className="text-3xl font-semibold text-foreground">12</p>
-              <p className="text-sm text-foreground/60 mt-1">Studies published or under peer review</p>
+              <p className="text-3xl font-semibold text-foreground">1</p>
+              <p className="text-sm text-foreground/60 mt-1">Paper under peer review at Taylor &amp; Francis Social Sciences</p>
             </div>
             <div className="flex items-center justify-between mt-auto pt-4">
               <span className="text-sm font-medium text-foreground">Research Output</span>
               <Link
-                href="#"
+                href="#built"
                 className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+                aria-label="View research outputs"
               >
                 <ArrowIcon className="w-4 h-4" />
               </Link>
@@ -194,13 +200,14 @@ export function ImpactDtc() {
 
           <div className="lg:col-span-3 bg-muted/50 rounded-2xl p-8 flex flex-col">
             <p className="text-xl lg:text-2xl font-medium leading-relaxed text-foreground max-w-3xl flex-1">
-              Our database informs policymakers and digital rights advocates across 3 continents, ensuring policies reflect the actual experiences of youth.
+              Founded at UN IGF Ethiopia 2022. Confronted Australia&apos;s Ambassador for Cyber Affairs at IGF 2025 Oslo. Now building toward HLPF 2026 and ECOSOC 2027 — a teen voice in the rooms where the laws are written.
             </p>
             <div className="flex items-center justify-between mt-auto pt-6">
-              <span className="text-xl font-semibold text-foreground">Learn More</span>
+              <span className="text-xl font-semibold text-foreground">Our history</span>
               <Link
                 href="#research"
                 className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+                aria-label="See our history"
               >
                 <ArrowIcon className="w-4 h-4" />
               </Link>

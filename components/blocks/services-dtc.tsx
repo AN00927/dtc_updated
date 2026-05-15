@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -39,11 +40,13 @@ function ServiceItem({ title, index }: { title: string; index: number }) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const overlayInnerRef = useRef<HTMLDivElement>(null);
   const charsRef = useRef<HTMLSpanElement[]>([]);
+  const reduced = useReducedMotion();
 
   const animationDefaults = { duration: 0.6, ease: "expo" };
 
   useEffect(() => {
     if (!itemRef.current) return;
+    if (reduced) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -65,7 +68,7 @@ function ServiceItem({ title, index }: { title: string; index: number }) {
     }, itemRef);
 
     return () => ctx.revert();
-  }, [index]);
+  }, [index, reduced]);
 
   const findClosestEdge = (
     mouseX: number,
@@ -80,6 +83,7 @@ function ServiceItem({ title, index }: { title: string; index: number }) {
   };
 
   const handleMouseEnter = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+    if (reduced) return;
     if (!itemRef.current || !overlayRef.current || !overlayInnerRef.current)
       return;
     const rect = itemRef.current.getBoundingClientRect();
@@ -120,6 +124,7 @@ function ServiceItem({ title, index }: { title: string; index: number }) {
   };
 
   const handleMouseLeave = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+    if (reduced) return;
     if (!itemRef.current || !overlayRef.current || !overlayInnerRef.current)
       return;
     const rect = itemRef.current.getBoundingClientRect();
@@ -203,9 +208,11 @@ export function ServicesDtc() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!titleRef.current || !sectionRef.current || !contentRef.current) return;
+    if (reduced) return;
 
     const title = titleRef.current;
     const chars = title.querySelectorAll(".char");
@@ -238,7 +245,7 @@ export function ServicesDtc() {
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, []);
+  }, [reduced]);
 
   return (
     <section

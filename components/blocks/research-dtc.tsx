@@ -15,6 +15,7 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { WaterRipple } from "@/components/water-ripple";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -97,6 +98,8 @@ function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>):
 }
 
 function VelocityText({ children, baseVelocity = 100, className = "" }: { children: React.ReactNode; baseVelocity?: number; className?: string }) {
+  const reduced = useReducedMotion();
+  const effectiveVelocity = reduced ? 0 : baseVelocity;
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -114,7 +117,8 @@ function VelocityText({ children, baseVelocity = 100, className = "" }: { childr
   const directionFactor = useRef(1);
 
   useAnimationFrame((_, delta) => {
-    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+    if (effectiveVelocity === 0) return;
+    let moveBy = directionFactor.current * effectiveVelocity * (delta / 1000);
     if (velocityFactor.get() < 0) directionFactor.current = -1;
     else if (velocityFactor.get() > 0) directionFactor.current = 1;
     moveBy += directionFactor.current * moveBy * velocityFactor.get();
@@ -250,8 +254,11 @@ function ProjectItem({ project, index, onHover, onClick }: { project: Project; i
   const handleMouseEnter = () => { onHover(true); setImageScale(1.22); };
   const handleMouseLeave = () => { onHover(false); xTo.current?.(0); yTo.current?.(0); setImageScale(1.15); };
 
+  const reduced = useReducedMotion();
+
   useEffect(() => {
     if (!containerRef.current) return;
+    if (reduced) return;
     const title = titleRef.current, desc = descRef.current;
     gsap.set(title, { y: 60, opacity: 0 });
     gsap.set(desc, { y: 40, opacity: 0 });
@@ -276,7 +283,7 @@ function ProjectItem({ project, index, onHover, onClick }: { project: Project; i
       .to(desc, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.6");
 
     return () => { maskTl.kill(); textTl.kill(); };
-  }, []);
+  }, [reduced]);
 
   return (
     <div
@@ -300,7 +307,7 @@ function ProjectItem({ project, index, onHover, onClick }: { project: Project; i
               className="absolute inset-0 w-full h-full"
               style={{ willChange: "transform", transformStyle: "preserve-3d", backfaceVisibility: "hidden", transform: "scale(1.15)" }}
             >
-              <WaterRipple src={project.image} maskRadius={maskRadius} />
+              <WaterRipple src={project.image} maskRadius={reduced ? 1200 : maskRadius} />
             </div>
           </div>
           <div className={`flex flex-col md:w-2/5 ${isEven ? "" : "md:text-right"}`}>
@@ -323,6 +330,7 @@ export function ResearchDtc() {
   const [isCursorVisible, setIsCursorVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const { setIsOverlayOpen } = useOverlay();
+  const reduced = useReducedMotion();
 
   const handleProjectClick = (project: Project) => {
     setIsCursorVisible(false);
@@ -337,7 +345,7 @@ export function ResearchDtc() {
 
   return (
     <section id="research" className="projects bg-background relative py-24">
-      <BlobCursor isVisible={isCursorVisible} />
+      {!reduced && <BlobCursor isVisible={isCursorVisible} />}
       <ProjectOverlay project={selectedProject} onClose={handleClose} />
       <div className="pb-16">
         <VelocityText baseVelocity={80} className="text-[clamp(4rem,12vw,14rem)] font-medium italic tracking-tight text-foreground uppercase px-8">
